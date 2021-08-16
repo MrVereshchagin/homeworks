@@ -14,24 +14,58 @@ const heroes = [
 
 const heroesItems = (name, surname, id) => {
     return `
-      <ul>
-        <li> ${name} ${surname} ${id} </li>
-
-      </ul>  
+      <li> <input type="checkbox" class="checkbox"/> ${name} ${surname}, ${id}</li>  
     `;
 };
 
 const generateHeroes = heroes.map(hero => {
     return heroesItems(hero.name, hero.surname, hero.id);
-});
+}).join("");
 
-const divHeroes = document.querySelector(".game_window");
+const divHeroes = document.querySelector(".game_window-1");
 
+const ul = `
+  <ul class="list"></ul>
+`;
 
-divHeroes.innerHTML = generateHeroes;
+divHeroes.innerHTML = ul;
+
+const list = document.querySelector(".list");
+list.innerHTML = generateHeroes;
 
 const myHeroes = document.querySelectorAll("li");
 
 myHeroes.forEach(elem => {
     elem.classList.add("decorate");
+    elem["checked"] = false;
 });
+
+const input = `
+  <input class="search" type="text" name="letters" placeholder="Search target!"></input>
+`;
+
+divHeroes.insertAdjacentHTML("afterbegin", input);
+
+const searchTarget = document.querySelector("input");
+
+function searchFromHeroes(e) {
+  const value = e.target.value;
+  if(value != "") {
+     myHeroes.forEach(elem => {
+       if(elem.innerText.search(value) == -1) {
+        elem.classList.add("hide");
+       } else {
+        elem.classList.remove("hide");
+       }
+     });
+  } else {
+    myHeroes.forEach(elem => {
+      elem.classList.remove("hide");
+    });
+  }
+}
+
+searchTarget.addEventListener("keydown", searchFromHeroes);
+searchTarget.addEventListener("keyup", searchFromHeroes);
+
+
